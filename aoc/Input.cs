@@ -4,9 +4,17 @@ namespace aoc
 	{
 		private const string DEFAULT_INPUT_FILENAME = "input.txt";
 		
-		public static IEnumerable<int> ReadIntList(string fileName = DEFAULT_INPUT_FILENAME)
+		public static IEnumerable<string> ReadStringList(string fileName = DEFAULT_INPUT_FILENAME)
 		{
 			foreach (var line in File.ReadAllLines(fileName))
+			{
+				yield return line;
+			}
+		}
+
+		public static IEnumerable<int> ReadIntList(string fileName = DEFAULT_INPUT_FILENAME)
+		{
+			foreach (var line in ReadStringList(fileName))
 			{
 				yield return int.Parse(line);
 			}
@@ -14,7 +22,7 @@ namespace aoc
 
 		public static IEnumerable<(string String, int Int)> ReadStringIntList(string fileName = DEFAULT_INPUT_FILENAME)
 		{
-			foreach (var line in File.ReadAllLines(fileName))
+			foreach (var line in ReadStringList(fileName))
 			{
 				var tokens = line.Split(' ');
 				yield return (tokens[0], int.Parse(tokens[1]));
