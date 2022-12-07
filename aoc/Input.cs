@@ -4,6 +4,11 @@ namespace aoc
 	{
 		private const string DEFAULT_INPUT_FILENAME = "input.txt";
 		
+		public static IEnumerable<char> ReadCharList(string fileName = DEFAULT_INPUT_FILENAME)
+		{
+			return File.ReadAllText(fileName);
+		}
+
 		public static IEnumerable<string> ReadStringList(string fileName = DEFAULT_INPUT_FILENAME)
 		{
 			foreach (var line in File.ReadAllLines(fileName))
