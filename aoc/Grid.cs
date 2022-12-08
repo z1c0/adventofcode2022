@@ -285,6 +285,13 @@ namespace aoc
 			return x >= 0 && y >= 0 && x < Width && y < Height;
 		}
 
+		public bool IsOnEdge((int X, int Y) p) => IsOnEdge(p.X, p.Y);
+
+		public bool IsOnEdge(int x, int y)
+		{
+			return x == 0 || y == 0 || x == Width - 1 || y == Height - 1;
+		}
+
 		public int Count(T t)
 		{
 			var counts = CountDistinct();
