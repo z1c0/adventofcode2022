@@ -25,6 +25,15 @@ namespace aoc
 			}
 		}
 
+		public static IEnumerable<(char Char, int Int)> ReadCharIntList(string fileName = DEFAULT_INPUT_FILENAME)
+		{
+			foreach (var line in ReadStringList(fileName))
+			{
+				var tokens = line.Split(' ');
+				yield return (tokens[0][0], int.Parse(tokens[1]));
+			}
+		}
+
 		public static IEnumerable<(string String, int Int)> ReadStringIntList(string fileName = DEFAULT_INPUT_FILENAME)
 		{
 			foreach (var line in ReadStringList(fileName))
