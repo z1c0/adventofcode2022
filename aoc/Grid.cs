@@ -314,6 +314,8 @@ namespace aoc
 		public int Width { get; }
 		public int Height { get; }
 		private readonly T[,] _data;
+
+		public DictionaryGrid<T> ToDictionaryGrid() => new(this);
 	}
 
 	public static partial class Input
