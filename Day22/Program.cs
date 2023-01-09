@@ -47,7 +47,7 @@ static void Part1(bool useCubeGeometry)
 		}
 	}
 
-	//Print(map, (x, y, dir));
+	Print(map, (x, y, dir));
 
 	Console.WriteLine($"row: {y + 1}, col: {x + 1}, {dir} -> {(y + 1) * 1000 + (x + 1) * 4 + (int)dir}");
 }

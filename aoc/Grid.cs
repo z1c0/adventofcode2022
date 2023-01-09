@@ -6,7 +6,7 @@ using System.Text;
 
 namespace aoc
 {
-	public class Grid<T> where T : struct
+	public class Grid<T> : IGrid<T> where T : struct
 	{
 		public Grid(int width, int height)
 		{
@@ -117,26 +117,25 @@ namespace aoc
 			return counts;
 		}
 
-		public (int X, int Y) Find(T t)
+		public (int x, int y) Find(T t)
 		{
 			var all = FindAll(t);
 			return all.Any() ? all.First() : (-1, -1);
 		}
 
-		public IEnumerable<(int X, int Y)> FindAll(T t)
-		{
-			return FindAll((x, y) => this[(x, y)].Equals(t));
-		}
+		public IEnumerable<(int x, int y)> FindAll(T t) => FindAll(c => c.v.Equals(t)).Select(e => e.p);
 
-		public IEnumerable<(int X, int Y)> FindAll(Func<int, int, bool> predicate)
+		public IEnumerable<((int x, int y) p, T v)> FindAll(Func<((int x, int y) p, T v), bool> predicate)
 		{
 			for (var y = 0; y < Height; y++)
 			{
 				for (var x = 0; x < Width; x++)
 				{
-					if (predicate(x, y))
+					var p = (x, y);
+					var v = this[p];
+					if (predicate((p, v)))
 					{
-						yield return (x, y);
+						yield return ((p, v));
 					}
 				}
 			}
@@ -170,6 +169,17 @@ namespace aoc
 				}
 			}
 			return count;
+		}
+
+		public void ForEach(Action<((int x, int y) p, T v)> callback)
+		{
+			for (var y = 0; y < Height; y++)
+			{
+				for (var x = 0; x < Width; x++)
+				{
+					callback(((x, y), this[x, y]));
+				}
+			}
 		}
 
 		public IEnumerable<(int X, int Y)> GetAdjacent4((int X, int Y) p)
@@ -299,10 +309,10 @@ namespace aoc
 			return count;
 		}
 
-		public T this[(int X, int Y) p]
+		public T this[(int x, int y) p]
 		{
-			get => this[p.X, p.Y];
-			set => this[p.X, p.Y] = value;
+			get => this[p.x, p.y];
+			set => this[p.x, p.y] = value;
 		}
 
 		public T this[int x, int y]

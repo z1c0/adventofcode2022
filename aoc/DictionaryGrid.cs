@@ -2,7 +2,7 @@ using System.Text;
 
 namespace aoc
 {
-	public class DictionaryGrid<T> where T : struct
+	public class DictionaryGrid<T> : IGrid<T> where T : struct
 	{
 		private readonly Dictionary<(int x, int y), T> _dict = new();
 
@@ -23,31 +23,29 @@ namespace aoc
 		public int GetMaxX() => _dict.Max(e => e.Key.x);
 		public int GetMaxY() => _dict.Max(e => e.Key.y);
 
-		public IEnumerable<KeyValuePair<(int x, int y), T>> FindAll(T t)
-		{
-			return FindAll(e => e.Value.Equals(t));
-		}
+		public IEnumerable<(int x, int y)> FindAll(T t) => FindAll(c => c.v.Equals(t)).Select(e => e.p);
 
-		public IEnumerable<KeyValuePair<(int x, int y), T>> FindAll(Func<KeyValuePair<(int x, int y), T>, bool> predicate)
+		public IEnumerable<((int x, int y) p, T v)> FindAll(Func<((int x, int y) p, T v), bool> predicate)
 		{
 			foreach (var e in _dict)
 			{
-				if (predicate(e)) 
+				var c = (e.Key, e.Value);
+				if (predicate(c)) 
 				{
-					yield return e;
+					yield return c;
 				}
 			};
 		}
 
-		public void ForEach(Action<KeyValuePair<(int x, int y), T>> callback)
+		public void ForEach(Action<((int x, int y) p, T v)> callback)
 		{
 			foreach (var e in _dict)
 			{
-				callback(e);
+				callback((e.Key, e.Value));
 			}
 		}
 
-		public T this[(int X, int Y) p]
+		public T this[(int x, int y) p]
 		{
 			get => _dict[p];
 			set => _dict[p] = value;
@@ -59,9 +57,9 @@ namespace aoc
 			set => this[(x, y)] = value;
 		}
 
-		public IEnumerable<KeyValuePair<(int x, int y), T>> GetAdjacent8((int x, int y) p, bool getOrCreate = false, T createWith = default)
+		public IEnumerable<((int x, int y) p, T v)> GetAdjacent8((int x, int y) p, bool getOrCreate = false, T createWith = default)
 			=> GetAdjacent8(p.x, p.y, getOrCreate, createWith);
-		public IEnumerable<KeyValuePair<(int x, int y), T>> GetAdjacent8(int x, int y, bool getOrCreate = false, T createWith = default)
+		public IEnumerable<((int x, int y) p, T v)> GetAdjacent8(int x, int y, bool getOrCreate = false, T createWith = default)
 		{
 			var cells = new[]
 			{
@@ -90,9 +88,9 @@ namespace aoc
 			}
 		}
 
-		public IEnumerable<KeyValuePair<(int x, int y), T>> GetAdjacent4((int x, int y) p, bool getOrCreate = false, T createWith = default)
+		public IEnumerable<((int x, int y) p, T v)> GetAdjacent4((int x, int y) p, bool getOrCreate = false, T createWith = default)
 			=> GetAdjacent4(p.x, p.y, getOrCreate, createWith);
-		public IEnumerable<KeyValuePair<(int x, int y), T>> GetAdjacent4(int x, int y, bool getOrCreate = false, T createWith = default)
+		public IEnumerable<((int x, int y) p, T v)> GetAdjacent4(int x, int y, bool getOrCreate = false, T createWith = default)
 		{
 			var cells = new[]
 			{
@@ -116,13 +114,13 @@ namespace aoc
 				}
 			}
 		}
-		public KeyValuePair<(int x, int y), T>  Get(int x, int y) => Get((x, y));
-		public KeyValuePair<(int x, int y), T> Get((int x, int y) p) => new(p, _dict[p]);
+		public ((int x, int y) p, T v)  Get(int x, int y) => Get((x, y));
+		public ((int x, int y) p, T v) Get((int x, int y) p) => new(p, _dict[p]);
 
-		public KeyValuePair<(int x, int y), T>?  TryGet(int x, int y) => TryGet((x, y));
-		public KeyValuePair<(int x, int y), T>? TryGet((int x, int y) p) => _dict.ContainsKey(p) ? new(p, _dict[p]) : null;
-		public KeyValuePair<(int x, int y), T>  GetOrCreate(int x, int y, T createWith = default) => GetOrCreate((x, y), createWith);
-		public KeyValuePair<(int x, int y), T> GetOrCreate((int x, int y) p, T createWith = default)
+		public ((int x, int y) p, T v)?  TryGet(int x, int y) => TryGet((x, y));
+		public ((int x, int y) p, T v)? TryGet((int x, int y) p) => _dict.TryGetValue(p, out T value) ? new(p, value) : null;
+		public ((int x, int y) p, T v) GetOrCreate(int x, int y, T createWith = default) => GetOrCreate((x, y), createWith);
+		public ((int x, int y) p, T v) GetOrCreate((int x, int y) p, T createWith = default)
 		{
 			if (!_dict.ContainsKey(p))
 			{

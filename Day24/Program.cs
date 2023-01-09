@@ -25,8 +25,7 @@ static void Part2()
 static (List<(int X, int Y, char)> blizzards, int width, int height) ReadInput()
 {
 	var grid = Input.ReadCharGrid();
-	var blizzards = grid.FindAll((x, y)	=> grid[x, y] != '#' && grid[x, y] != '.')
-		.Select(p => (p.X, p.Y, grid[p])).ToList();
+	var blizzards = grid.FindAll(c => c.v != '#' && c.v != '.').Select(c => (c.p.x, c.p.y, c.v)).ToList();
 	return (blizzards, grid.Width, grid.Height);
 }
 

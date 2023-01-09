@@ -18,17 +18,17 @@ static void Part1(int rounds)
 		var elves = map.FindAll('#').ToList();
 		foreach (var e in elves)
 		{
-			var a = map.GetAdjacent8(e.Key, true, '.').ToList();
-			if (a.Any(c => c.Value == '#'))
+			var a = map.GetAdjacent8(e, true, '.').ToList();
+			if (a.Any(c => c.v == '#'))
 			{
 				foreach (var d in directions)
 				{
 					var done = d switch
 					{
-						'N' => TryPropose(e.Key, proposals, map, a[1].Key, a[2].Key, a[0].Key),
-						'S' => TryPropose(e.Key, proposals, map, a[6].Key, a[7].Key, a[5].Key),
-						'W' => TryPropose(e.Key, proposals, map, a[3].Key, a[0].Key, a[5].Key),
-						'E' => TryPropose(e.Key, proposals, map, a[4].Key, a[2].Key, a[7].Key),
+						'N' => TryPropose(e, proposals, map, a[1].p, a[2].p, a[0].p),
+						'S' => TryPropose(e, proposals, map, a[6].p, a[7].p, a[5].p),
+						'W' => TryPropose(e, proposals, map, a[3].p, a[0].p, a[5].p),
+						'E' => TryPropose(e, proposals, map, a[4].p, a[2].p, a[7].p),
 						_ => throw new InvalidOperationException(),
 					};
 					if (done)
@@ -61,7 +61,7 @@ static void Part1(int rounds)
 		directions.Add(l);
 	}
 
-	var cells = map.FindAll('#').Select(e => e.Key).ToList();
+	var cells = map.FindAll('#').ToList();
 	var minX = cells.Min(e => e.x);
 	var minY = cells.Min(e => e.y);
 	var maxX = cells.Max(e => e.x);
@@ -72,7 +72,7 @@ static void Part1(int rounds)
 
 static bool TryPropose((int x, int y) elf, Dictionary<(int, int), List<(int, int)>> proposals, DictionaryGrid<char> map, (int x, int y) a1, (int x, int y) a2, (int x, int y) a3)
 {
-	static bool Check(DictionaryGrid<char> map, (int x, int y) a) => map.Get(a).Value == '.';
+	static bool Check(DictionaryGrid<char> map, (int x, int y) a) => map.Get(a).v == '.';
 
 	if (Check(map, a1) &&	Check(map, a2) &&	Check(map, a3))
 	{
