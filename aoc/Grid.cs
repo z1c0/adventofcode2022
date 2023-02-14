@@ -330,10 +330,10 @@ namespace aoc
 
 	public static partial class Input
 	{
-		public static Grid<int> ReadIntGrid(string fileName = "input.txt") => ParseIntGrid(File.ReadAllLines(fileName));
+		public static Grid<int> ReadIntGrid() => ParseIntGrid(Input.ReadStringList());
 		public static Grid<int> ParseIntGrid(IEnumerable<string> lines) => ParseGrid(lines, c => int.Parse(c.ToString()));
 
-		public static Grid<char> ReadCharGrid(string fileName = "input.txt") => ParseCharGrid(File.ReadAllLines(fileName));
+		public static Grid<char> ReadCharGrid() => ParseCharGrid(Input.ReadStringList());
 		public static Grid<char> ParseCharGrid(IEnumerable<string> lines) => ParseGrid(lines, c => c);
 
 		private static Grid<T> ParseGrid<T>(IEnumerable<string> lines, Func<char, T> converter) where T : struct

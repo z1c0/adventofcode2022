@@ -1,32 +1,23 @@
 ﻿using aoc;
 
-Day.Run(() =>
-{
-	Part1();
-	Part2();
-});
+Day.Run(
+	Input.ReadStringList,
+	(Part1, 157L, 8243L),
+	(Part2, 70L, 2631L)
+);
 
-static void Part1()
+static long Part1(IList<string> input) =>
+	input.Sum(line => Score(Find(new() { line[..(line.Length / 2)], line[(line.Length / 2)..] })));
+
+static long Part2(IList<string> input)
 {
 	var sum = 0L;
-	foreach (var line in ReadInput())
-	{
-		var c = Find(new() { line[..(line.Length / 2)], line[(line.Length / 2)..] });
-		sum += Score(c);
-	}
-	Console.WriteLine($"The sum of the priorities is: {sum}");
-}
-
-static void Part2()
-{
-	var sum = 0L;
-	var input = ReadInput();
 	for (var i = 0; i < input.Count; i += 3)
 	{
 		var c = Find(new() { input[i], input[i + 1], input[i + 2] });
 		sum += Score(c);
 	}
-	Console.WriteLine($"The sum of the priorities is: {sum}");
+	return sum;
 }
 
 static char Find(List<string> lines)
@@ -49,9 +40,4 @@ static int Score(char c)
 		>= 'A' and <= 'Z' => c - 'A' + 27,
 		_ => throw new InvalidOperationException(),
 	};
-}
-
-static List<string> ReadInput()
-{
-	return Input.ReadStringList().ToList();
 }

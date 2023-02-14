@@ -157,7 +157,7 @@ namespace aoc
 
 	public static partial class Input
 	{
-		public static DictionaryGrid<char> ReadCharDictionaryGrid(string fileName = Input.DEFAULT_INPUT_FILENAME)
-			=> new(ReadCharGrid(fileName));
+		public static DictionaryGrid<char> ReadCharDictionaryGrid()
+			=> new(ReadCharGrid());
 	}
 }

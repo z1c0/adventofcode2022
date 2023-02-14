@@ -1,42 +1,44 @@
 namespace aoc
 {
+	public enum Context
+	{
+		Sample,
+		Full,
+	}
+
 	public static partial class Input
 	{
-		private const string DEFAULT_INPUT_FILENAME = "input.txt";
+		public static Context Context { get; set; }= Context.Full;
+
+		private static string GetFileName() => Context == Context.Full ? "input.txt" : "sample.txt";
 		
-		public static IEnumerable<char> ReadCharList(string fileName = DEFAULT_INPUT_FILENAME)
+		public static IEnumerable<char> ReadCharList()
 		{
-			return File.ReadAllText(fileName);
+			return File.ReadAllText(GetFileName());
 		}
 
-		public static IEnumerable<string> ReadStringList(string fileName = DEFAULT_INPUT_FILENAME)
+		public static IList<string> ReadStringList() => File.ReadAllLines(GetFileName()).ToList();
+		
+		public static IEnumerable<int> ReadIntList()
 		{
-			foreach (var line in File.ReadAllLines(fileName))
-			{
-				yield return line;
-			}
-		}
-
-		public static IEnumerable<int> ReadIntList(string fileName = DEFAULT_INPUT_FILENAME)
-		{
-			foreach (var line in ReadStringList(fileName))
+			foreach (var line in ReadStringList())
 			{
 				yield return int.Parse(line);
 			}
 		}
 
-		public static IEnumerable<(char Char, int Int)> ReadCharIntList(string fileName = DEFAULT_INPUT_FILENAME)
+		public static IEnumerable<(char Char, int Int)> ReadCharIntList()
 		{
-			foreach (var line in ReadStringList(fileName))
+			foreach (var line in ReadStringList())
 			{
 				var tokens = line.Split(' ');
 				yield return (tokens[0][0], int.Parse(tokens[1]));
 			}
 		}
 
-		public static IEnumerable<(string String, int Int)> ReadStringIntList(string fileName = DEFAULT_INPUT_FILENAME)
+		public static IEnumerable<(string String, int Int)> ReadStringIntList()
 		{
-			foreach (var line in ReadStringList(fileName))
+			foreach (var line in ReadStringList())
 			{
 				var tokens = line.Split(' ');
 				yield return (tokens[0], int.Parse(tokens[1]));

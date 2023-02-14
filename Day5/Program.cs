@@ -1,21 +1,19 @@
 ﻿using aoc;
 
-Day.Run(() =>
-{
-	Part1(false);
-	Part1(true);
-});
+Day.Run(
+	ReadInput,
+	(Solve, false, "CMZ", "HNSNMTLHQ"),
+	(Solve, true, "MCD", "RNLFDJMCT")
+);
 
-static void Part1(bool reverse)
+static string Solve((List<Stack<char>> crates, List<Move> moves) input, bool reverse)
 {
-	var (crates, moves) = ReadInput();
-
-	foreach (var m in moves)
+	foreach (var m in input.moves)
 	{
 		var moved = new List<char>();
 		for (var i = 0; i < m.Count; i++)
 		{
-			moved.Add(crates[m.From - 1].Pop());
+			moved.Add(input.crates[m.From - 1].Pop());
 		}
 		if (reverse)
 		{
@@ -23,17 +21,13 @@ static void Part1(bool reverse)
 		}
 		foreach (var c in moved)
 		{
-			crates[m.To - 1].Push(c);
+			input.crates[m.To - 1].Push(c);
 		}
 	}
-	foreach (var c in crates)
-	{
-		Console.Write(c.FirstOrDefault(' '));
-	}
-	Console.WriteLine();
+	return string.Join(string.Empty, input.crates.Select(c => c.FirstOrDefault()));
 }
 
-static (List<Stack<char>> Crates, List<Move> Moves) ReadInput()
+static (List<Stack<char>> crates, List<Move> moves) ReadInput()
 {
 	var crates = new List<Stack<char>>();
 	var moves = new List<Move>();

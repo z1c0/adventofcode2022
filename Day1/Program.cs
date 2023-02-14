@@ -1,20 +1,16 @@
 ﻿using aoc;
 
-Day.Run(() =>
-{
-	Part1(1);
-	Part1(3);
-});
+Day.Run(
+	ReadInput,
+	(Solve, 1, 24000, 69310),
+	(Solve, 3, 45000, 206104)
+);
 
-static void Part1(int top)
+static int Solve(List<List<int>> input, int top)
 {
-	var caloriesSorted = ReadInput().OrderByDescending(e => e.Sum()).ToList();
-	var totalCalories = 0L;
-	for (var i = 0; i < top; i++)
-	{
-		totalCalories += caloriesSorted[i].Sum();
-	}
+	var totalCalories = ReadInput().Select(l => l.Sum()).OrderDescending().Take(top).Sum();
 	Console.WriteLine($"Total calories carried: {totalCalories}");
+	return totalCalories;
 }
 
 static List<List<int>> ReadInput()

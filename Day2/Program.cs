@@ -1,22 +1,19 @@
 ﻿using aoc;
 
-Day.Run(() =>
-{
-	Part1();
-	Part2();
-});
+Day.Run(
+	ReadInput,
+	(Part1, 15L, 10624L),
+	(Part2, 12L, 14060L)
+);
 
-static void Part1()
+static long Part1(IEnumerable<(Play Opponent, Play Me, Result Result)> input)
 {
-	var score = 0L;
-	foreach (var (Opponent, Me, _) in ReadInput().ToList())
-	{
-		score += Score(Me, Opponent);
-	}
+	var score = input.Sum(i => Score(i.Me, i.Opponent));
 	Console.WriteLine($"The total score is {score}.");
+	return score;
 }
 
-static void Part2()
+static long Part2(IEnumerable<(Play Opponent, Play Me, Result Result)> input)
 {
 	var score = 0L;
 	foreach (var (Opponent, _, Result) in ReadInput().ToList())
@@ -46,9 +43,10 @@ static void Part2()
 		score += Score(me, Opponent);
 	}
 	Console.WriteLine($"The total score is {score}.");
+	return score;
 }
 
-static int Score(Play me, Play opponent)
+static long Score(Play me, Play opponent)
 {
 	var score = (int)me + 1;
 	score += me switch
